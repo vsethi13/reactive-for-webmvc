@@ -22,7 +22,7 @@ public class Step2a {
 
 		for (int i = 1; i <= 3; i++) {
 			System.out.println("Getting id=" + i);
-			client.get().uri("/person/{id}", i).retrieve().bodyToMono(Person.class);
+			client.get().uri("/person/{id}", i).retrieve().bodyToMono(Person.class).subscribe();
 		}
 
 		logTime(start);

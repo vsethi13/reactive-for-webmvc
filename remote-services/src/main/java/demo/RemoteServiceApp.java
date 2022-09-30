@@ -53,21 +53,21 @@ public class RemoteServiceApp {
 		}
 
 		Mono<ServerResponse> getPerson(ServerRequest request) {
-			Long personId = Long.parseLong(request.pathVariable("id"));
+			Long personId = Long.parseLong(request.pathVariable("id")) % 10;
 			Map<String, Object> body = PERSON_DATA.get(personId);
 			return body != null ? ServerResponse.ok().syncBody(body) : NOT_FOUND;
 		}
 
 		Mono<ServerResponse> getPersonHobbies(ServerRequest request) {
-			Long personId = Long.parseLong(request.pathVariable("id"));
+			Long personId = Long.parseLong(request.pathVariable("id")) % 10;
 			Map<String, Object> body = HOBBY_DATA.get(personId);
 			return body != null ? ServerResponse.ok().syncBody(body) : NOT_FOUND;
 		}
 
 		Mono<ServerResponse> getPersonEvents(ServerRequest request) {
 			return ServerResponse.ok().body(fromServerSentEvents(
-					Flux.interval(Duration.ofSeconds(2))
-							.map(i -> PERSON_DATA.get((i % 10) + 1))
+					Flux.interval(Duration.ofMillis(500))
+							.map(i -> PERSON_DATA.get(i % 10))
 							.map(data -> ServerSentEvent.builder(data).build())));
 		}
 
@@ -76,6 +76,7 @@ public class RemoteServiceApp {
 
 		static {
 			PERSON_DATA = new HashMap<>();
+			addPerson(0L, "Ozuna");
 			addPerson(1L, "Amanda");
 			addPerson(2L, "Brittany");
 			addPerson(3L, "Christopher");
@@ -100,6 +101,7 @@ public class RemoteServiceApp {
 
 		static {
 			HOBBY_DATA = new HashMap<>();
+			addHobby(0L, "Music");
 			addHobby(1L, "Travel");
 			addHobby(2L, "Coffee Roasting");
 			addHobby(3L, "Puzzles");

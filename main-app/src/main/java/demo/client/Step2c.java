@@ -21,7 +21,7 @@ public class Step2c {
 
 		Instant start = Instant.now();
 
-		Flux.range(1, 3)
+		Flux.range(1, 1000)
 				.doOnNext(i -> System.out.println("Getting id=" + i))
 				.flatMap(i -> client.get().uri("/person/{id}", i).retrieve().bodyToMono(Person.class))
 				.doOnNext(person -> System.out.println("Got " + person))

@@ -2,6 +2,7 @@ package demo.client;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.stream.IntStream;
 
 import demo.Person;
 import org.slf4j.Logger;
@@ -26,11 +27,13 @@ public class Step1a {
 
 		Instant start = Instant.now();
 
-		for (int i = 1; i <= 3; i++) {
-			System.out.println("Getting id=" + i);
-			Person person = restTemplate.getForObject("/person/{id}", Person.class, i);
-			System.out.println("Got " + person);
-		}
+//		for (int i = 1; i <= 3; i++) {
+//			System.out.println("Getting id=" + i);
+//			Person person = restTemplate.getForObject("/person/{id}", Person.class, i);
+//			System.out.println("Got " + person);
+//		}
+
+		IntStream.rangeClosed(1, 1000).parallel().mapToObj(i -> restTemplate.getForObject("/person/{id}", Person.class, i)).forEach(x -> {});
 
 		logTime(start);
 	}
